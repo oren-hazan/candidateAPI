@@ -7,16 +7,23 @@ const userSchema = new mongoose.Schema({
 
     email: {
       type: String,
-      unique: true
+      unique: true,
+      default: null
     },
 
     linkedinUrl: {
       type: String,
       lowercase: true, 
-      unique: true
+      unique: true,
+      default: null
     }, 
 
     phone: {
+      type: String,
+      default: null
+    },
+
+    rawData: {
       type: String
     },
 

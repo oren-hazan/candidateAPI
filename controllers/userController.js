@@ -5,13 +5,14 @@ const create = async (req, res) => {
   try {
     //req.body = candidate;
       candidate = await parsedAndCreate();
-      //console.log(candidate)
-        const { PersonalId, Email, LinkedinUrl, Phone} = candidate;
+      console.log(candidate)
+        const [{ PersonalId, Email, LinkedinUrl, Phone, RawData}] = candidate;
       const user = await new User({
         personalId: PersonalId, 
         email: Email,
         linkedinUrl: LinkedinUrl,
         phone: Phone,
+        rawData: RawData,
         timestamp: new Date()
     }).save();
     res.status(201).json(user); 

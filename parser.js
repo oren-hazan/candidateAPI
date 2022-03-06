@@ -2,11 +2,9 @@ const fs = require('fs');
 const PDFParser = require('pdf2json');
 const files = fs.readdirSync('candidates')
 
-let candidates = [];
-
 parsedAndCreate = async () => {
 
-    await Promise.all(files.map(async (file) =>{
+    return await Promise.all(files.map(async (file) =>{
 
         let pdfParser = new PDFParser(this, 1);
         pdfParser.loadPDF(`candidates/${file}`);
@@ -22,12 +20,15 @@ parsedAndCreate = async () => {
                     PersonalId: /Id:\s(.*?)Email:/i.exec(raw)[1].trim(),
                     Email: /Email:\s(.*?)Phone number:/i.exec(raw)[1].trim(),
                     Phone: /Phone number:\s(.*?)Linkedin:/i.exec(raw)[1].trim(),
-                    LinkedinUrl: /Linkedin:\s(.*?)Description/i.exec(raw)[1].trim()
+                    LinkedinUrl: /Linkedin:\s(.*?)Description/i.exec(raw)[1].trim(), 
+                    RawData: raw
                 })
             })
-        }).then(resolve => {console.log(resolve)})
-       // candidates.push(candidate);
+        }).then(resolve => { //console.log(resolve)
+            return resolve;
+        })
         //console.log(candidate)
+        return candidate;
     }))
 };
 
