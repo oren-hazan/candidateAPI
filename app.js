@@ -1,19 +1,21 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const http = require('http');
 const app = express();
-const port = "3000";
 const server = http.createServer(app);
-server.listen(port);
+const connectDB = require('./db/mongoConnect');
+require("dotenv").config();
 
-main().catch(err => console.log(err));
+connectDB();
 
-async function main() {
-  await mongoose.connect('mongodb://localhost:27017/Candidate_details');
-  //console.log("mongo connect");
-}
+const userRoute = require('./routes/userRoute');
+app.use("/api", userRoute)
 
-app.get("/", (req,res) => {
-    res.json({msg: "candidate details like-", id: "", email: "", phoneNumber: "", linkedinProfile: ""})
-})
+ /*const parse = require('./parser');
+ app.post('/api/user/create', parse.parsedAndCreate)*/
+
+
+const port = process.env.PORT;
+server.listen(port, ()=> {
+  console.log(`listening on port:${port}`);
+});
 

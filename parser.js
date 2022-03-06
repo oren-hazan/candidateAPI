@@ -1,10 +1,11 @@
-const fs = require('fs');;
+const fs = require('fs');
 const PDFParser = require('pdf2json');
 const files = fs.readdirSync('candidates')
 
 let candidates = [];
 
-(async () => {
+parsedAndCreate = async () => {
+
     await Promise.all(files.map(async (file) =>{
 
         let pdfParser = new PDFParser(this, 1);
@@ -14,20 +15,23 @@ let candidates = [];
 
             pdfParser.on('pdfParser_dataReady', (pdfData) => {
                 const raw = pdfParser.getRawTextContent().replace(/\r\n/g, "");
-                console.log(raw)
+                //console.log(raw)
 
                 resolve({
-                    name: /Name:\s(.*?)Id:/i.exec(raw)[1].trim(),
-                    Id: /Id:\s(.*?)Email:/i.exec(raw)[1].trim(),
+                    Name: /Name:\s(.*?)Id:/i.exec(raw)[1].trim(),
+                    PersonalId: /Id:\s(.*?)Email:/i.exec(raw)[1].trim(),
                     Email: /Email:\s(.*?)Phone number:/i.exec(raw)[1].trim(),
                     Phone: /Phone number:\s(.*?)Linkedin:/i.exec(raw)[1].trim(),
-                    Linkedin: /Linkedin:\s(.*?)Description/i.exec(raw)[1].trim()
+                    LinkedinUrl: /Linkedin:\s(.*?)Description/i.exec(raw)[1].trim()
                 })
             })
-            
-        });
-
-        candidates.push(candidate);
+        }).then(resolve => {console.log(resolve)})
+       // candidates.push(candidate);
+        //console.log(candidate)
     }))
-    fs.writeFileSync('candidates.json', JSON.stringify(candidates));
-})();
+};
+
+module.exports = parsedAndCreate;
+
+
+
